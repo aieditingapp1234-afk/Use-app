@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#07111f" />
+  <title>AI Master — Smart AI Studio</title>
+  <style>
+    :root{
+      --bg:#050914;
+      --panel:#0a1220;
+      --panel2:#0d1828;
+      --card:rgba(15,27,44,.78);
+      --line:rgba(255,255,255,.09);
+      --text:#eef6ff;
+      --muted:#91a4b9;
+      --blue:#38bdf8;
+      --blue2:#2563eb;
+      --cyan:#22d3ee;
+      --green:#22c55e;
+      --pink:#f472b6;
+      --gold:#fbbf24;
+      --danger:#fb7185;
+      --shadow:0 20px 55px rgba(0,0,0,.35);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    body{
+      min-height:100vh;
+      overflow-x:hidden;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(34,211,238,.11), transparent 25%),
+        radial-gradient(circle at 90% 15%, rgba(59,130,246,.14), transparent 28%),
+        linear-gradient(180deg,#040812,#07111f 48%,#050a13);
+    }
+    button,input,textarea{font:inherit}
+    button{cursor:pointer}
+    .app{min-height:100vh;max-width:900px;margin:auto;padding-bottom:95px}
+    .topbar{
+      position:sticky;top:0;z-index:30;
+      padding:12px 14px 10px;
+      backdrop-filter:blur(18px);
+      background:rgba(5,9,20,.78);
+      border-bottom:1px solid var(--line);
+    }
+    .toprow{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{
+      width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--blue2),var(--cyan));
+      box-shadow:0 0 30px rgba(34,211,238,.22);
+      font-size:21px;
+      animation:float 3s ease-in-out infinite;
+    }
+    .brand h1{font-size:17px;margin:0;letter-spacing:.5px}
+    .brand p{font-size:11px;color:var(--muted);margin:2px 0 0}
+    .icon-btn{
+      width:42px;height:42px;border:1px solid var(--line);background:rgba(255,255,255,.04);
+      color:#fff;border-radius:14px;display:grid;place-items:center;font-size:18px
+    }
+    .hero{padding:18px 14px 8px}
+    .hero-card{
+      position:relative;overflow:hidden;border:1px solid var(--line);border-radius:28px;
+      padding:22px;
+      background:
+        radial-gradient(circle at 80% 0%,rgba(56,189,248,.22),transparent 36%),
+        linear-gradient(135deg,rgba(17,32,53,.95),rgba(7,15,28,.92));
+      box-shadow:var(--shadow);
+    }
+    .hero-glow{position:absolute;inset:-60px auto auto 60%;width:200px;height:200px;background:rgba(34,211,238,.16);filter:blur(35px);border-radius:50%}
+    .pill{display:inline-flex;gap:7px;align-items:center;padding:7px 11px;border:1px solid rgba(56,189,248,.25);background:rgba(56,189,248,.08);border-radius:999px;font-size:11px;color:#c9f2ff}
+    .hero h2{margin:13px 0 7px;font-size:28px;line-height:1.06}
+    .hero h2 span{background:linear-gradient(90deg,#fff,#67e8f9,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p{margin:0;color:var(--muted);font-size:13px;line-height:1.55;max-width:620px}
+    .hero-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+    .primary,.secondary{
+      border:0;border-radius:14px;padding:11px 15px;font-weight:700;color:#fff;
+      transition:.2s transform,.2s opacity;
+    }
+    .primary{background:linear-gradient(135deg,var(--blue2),var(--cyan));box-shadow:0 10px 28px rgba(34,211,238,.17)}
+    .secondary{background:rgba(255,255,255,.05);border:1px solid var(--line)}
+    .primary:active,.secondary:active,.icon-btn:active,.tool:active{transform:scale(.97)}
+    .section{padding:15px 14px 0}
+    .section-title{display:flex;justify-content:space-between;align-items:center;margin:0 0 10px}
+    .section-title h3{font-size:14px;margin:0}
+    .section-title span{font-size:11px;color:var(--muted)}
+    .tools{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .tool{
+      display:flex;align-items:center;gap:10px;padding:13px;border-radius:18px;
+      background:var(--card);border:1px solid var(--line);color:#fff;text-align:left;min-height:76px;
+      box-shadow:0 8px 24px rgba(0,0,0,.15);
+    }
+    .tool .emoji{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:rgba(255,255,255,.06);font-size:20px}
+    .tool b{display:block;font-size:13px}.tool small{display:block;color:var(--muted);font-size:10px;margin-top:3px}
+    .chat-shell{margin:15px 14px 0;border:1px solid var(--line);border-radius:25px;overflow:hidden;background:rgba(7,14,25,.88);box-shadow:var(--shadow)}
+    .chat-head{padding:13px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);background:rgba(255,255,255,.025)}
+    .ai-status{display:flex;align-items:center;gap:10px}
+    .ai-avatar{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#0ea5e9,#7c3aed);box-shadow:0 0 20px rgba(56,189,248,.22)}
+    .online{width:8px;height:8px;background:#22c55e;border-radius:50%;display:inline-block;box-shadow:0 0 10px #22c55e}
+    .chat-title{font-size:13px;font-weight:800}.chat-sub{font-size:10px;color:var(--muted);margin-top:2px}
+    .messages{height:420px;overflow:auto;padding:15px 12px 20px;scroll-behavior:smooth}
+    .messages::-webkit-scrollbar{width:5px}.messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:10px}
+    .msg{display:flex;gap:8px;margin:12px 0;align-items:flex-end;animation:rise .28s ease}
+    .msg.user{justify-content:flex-end}.bubble{
+      max-width:82%;padding:11px 13px;border-radius:18px 18px 18px 5px;
+      background:#101d30;border:1px solid var(--line);font-size:13px;line-height:1.5;
+      white-space:pre-wrap;word-break:break-word;
+    }
+    .msg.user .bubble{border-radius:18px 18px 5px 18px;background:linear-gradient(135deg,#1d4ed8,#0284c7);border-color:transparent}
+    .time{font-size:9px;color:#71839a;min-width:36px}
+    .typing{display:flex;gap:4px;align-items:center;padding:12px 14px}
+    .dot{width:7px;height:7px;border-radius:50%;background:#7dd3fc;animation:typing 1.1s infinite}
+    .dot:nth-child(2){animation-delay:.15s}.dot:nth-child(3){animation-delay:.3s}
+    .suggestions{padding:0 12px 10px;display:flex;gap:8px;overflow:auto}
+    .chip{flex:0 0 auto;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#d9e8f7;padding:8px 11px;border-radius:999px;font-size:11px}
+    .composer{padding:10px;border-top:1px solid var(--line);background:rgba(4,9,18,.9)}
+    .input-row{display:flex;align-items:flex-end;gap:8px}
+    .plus{
+      width:43px;height:43px;border:1px solid var(--line);background:rgba(255,255,255,.04);color:#fff;border-radius:14px;font-size:21px
+    }
+    .input-wrap{flex:1;display:flex;align-items:flex-end;gap:8px;border:1px solid var(--line);background:#0a1321;border-radius:17px;padding:7px 10px}
+    textarea{
+      width:100%;resize:none;border:0;outline:0;background:transparent;color:#fff;min-height:28px;max-height:120px;
+      font-size:13px;line-height:1.4
+    }
+    .send{
+      width:38px;height:38px;border:0;border-radius:12px;color:#fff;background:linear-gradient(135deg,var(--blue2),var(--cyan));font-size:17px
+    }
+    .attach-menu{display:none;margin:0 0 9px;padding:8px;border:1px solid var(--line);background:#0c1626;border-radius:16px;gap:7px;flex-wrap:wrap}
+    .attach-menu.show{display:flex;animation:fade .18s ease}
+    .attach-option{padding:8px 10px;border-radius:12px;border:1px solid var(--line);background:#111d2e;color:#fff;font-size:11px}
+    .bottom-nav{
+      position:fixed;left:50%;bottom:12px;transform:translateX(-50%);z-index:40;
+      width:min(700px,calc(100% - 22px));display:grid;grid-template-columns:repeat(4,1fr);
+      padding:8px;border:1px solid var(--line);border-radius:21px;background:rgba(6,12,22,.83);backdrop-filter:blur(18px);
+      box-shadow:0 18px 50px rgba(0,0,0,.42)
+    }
+    .nav{border:0;background:transparent;color:#7f94aa;padding:7px 4px;border-radius:14px;font-size:10px}
+    .nav.active{color:#fff;background:rgba(56,189,248,.1)}.nav div{font-size:17px;margin-bottom:2px}
+    .modal-bg{position:fixed;inset:0;display:none;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.65);backdrop-filter:blur(8px);z-index:60}
+    .modal-bg.show{display:flex;animation:fade .18s ease}
+    .modal{width:min(620px,100%);border-radius:25px 25px 0 0;border:1px solid var(--line);background:#091320;padding:18px;box-shadow:0 -20px 55px rgba(0,0,0,.35)}
+    .modal-head{display:flex;justify-content:space-between;align-items:center}.modal h3{margin:0;font-size:15px}.close{border:0;background:rgba(255,255,255,.06);color:#fff;width:35px;height:35px;border-radius:11px}
+    .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
+    .modal-action{padding:14px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.035);color:#fff;text-align:left}
+    .modal-action b{display:block;font-size:12px}.modal-action small{display:block;color:var(--muted);margin-top:4px;font-size:10px}
+    .toast{position:fixed;left:50%;bottom:93px;transform:translateX(-50%) translateY(14px);background:#111d2e;border:1px solid var(--line);padding:10px 14px;border-radius:13px;font-size:11px;opacity:0;pointer-events:none;z-index:100;transition:.25s;white-space:nowrap}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+    @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes typing{0%,60%,100%{transform:translateY(0);opacity:.55}30%{transform:translateY(-4px);opacity:1}}
+    @keyframes fade{from{opacity:0}to{opacity:1}}
+    @media(min-width:700px){
+      .hero{padding-top:22px}.tools{grid-template-columns:repeat(4,1fr)}
+      .hero h2{font-size:36px}.messages{height:470px}.chat-shell{margin-top:18px}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="toprow">
+      <div class="brand">
+        <div class="logo">✦</div>
+        <div><h1>AI MASTER</h1><p>Smart AI • Creator • Study Assistant</p></div>
+      </div>
+      <button class="icon-btn" id="themeBtn" title="Toggle glow">☾</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-card">
+      <div class="hero-glow"></div>
+      <span class="pill">⚡ MOBILE AI STUDIO</span>
+      <h2>Ek app, <span>multiple AI powers.</span></h2>
+      <p>Chat karo, study help lo, caption banao, ideas nikalo aur apne creative work ko fast karo.</p>
+      <div class="hero-actions">
+        <button class="primary" onclick="focusChat()">🤖 Start AI Chat</button>
+        <button class="secondary" onclick="showToast('AI Master demo ready hai 🔥')">✨ Explore</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-title"><h3>⚡ Quick AI Tools</h3><span>Tap to use</span></div>
+    <div class="tools">
+      <button class="tool" onclick="quickPrompt('Mere liye ek Instagram reel ka viral idea banao.')"><span class="emoji">🎬</span><span><b>Reel Idea</b><small>Viral concept</small></span></button>
+      <button class="tool" onclick="quickPrompt('Class 12 ke liye ek difficult topic ko simple Hindi me samjhao.')"><span class="emoji">📚</span><span><b>Study Help</b><small>Easy explanation</small></span></button>
+      <button class="tool" onclick="quickPrompt('SMART ABHISHEK ke liye ek stylish Instagram caption aur hashtags banao.')"><span class="emoji">✍️</span><span><b>Caption</b><small>Post ready</small></span></button>
+      <button class="tool" onclick="quickPrompt('Mujhe phone se banane layak ek unique AI project idea do.')"><span class="emoji">💡</span><span><b>Project Idea</b><small>Build something</small></span></button>
+    </div>
+  </section>
+
+  <section class="chat-shell" id="chatBox">
+    <div class="chat-head">
+      <div class="ai-status">
+        <div class="ai-avatar">🤖</div>
+        <div><div class="chat-title">AI Master Assistant <span class="online"></span></div><div class="chat-sub">Real Gemini AI • Ready to help</div></div>
+      </div>
+      <button class="icon-btn" style="width:36px;height:36px" onclick="clearChat()">⌫</button>
+    </div>
+
+    <div class="messages" id="messages"></div>
+
+    <div class="suggestions" id="suggestions">
+      <button class="chip" onclick="quickPrompt('Mere liye ek app idea do')">App idea</button>
+      <button class="chip" onclick="quickPrompt('HTML website kaise banaye?')">Coding</button>
+      <button class="chip" onclick="quickPrompt('Mujhe study plan do')">Study plan</button>
+      <button class="chip" onclick="quickPrompt('Ek cool bio likho')">Bio</button>
+    </div>
+
+    <div class="composer">
+      <div class="attach-menu" id="attachMenu">
+        <button class="attach-option" onclick="fakeAttach('Gallery')">🖼️ Gallery</button>
+        <button class="attach-option" onclick="fakeAttach('Camera')">📷 Camera</button>
+        <button class="attach-option" onclick="fakeAttach('File')">📄 File</button>
+        <button class="attach-option" onclick="fakeAttach('Voice')">🎤 Voice</button>
+      </div>
+      <div class="input-row">
+        <button class="plus" onclick="toggleAttach()">＋</button>
+        <div class="input-wrap">
+          <textarea id="input" rows="1" placeholder="AI Master se kuch bhi pucho..."></textarea>
+          <button class="send" onclick="sendMessage()">➤</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<nav class="bottom-nav">
+  <button class="nav active" onclick="focusChat()"><div>💬</div>Chat</button>
+  <button class="nav" onclick="scrollToTools()"><div>⚡</div>Tools</button>
+  <button class="nav" onclick="openProfile()"><div>👤</div>Profile</button>
+  <button class="nav" onclick="showToast('Settings coming soon ⚙️')"><div>⚙️</div>Settings</button>
+</nav>
+
+<div class="modal-bg" id="modalBg" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-head">
+      <h3>👤 AI Master Profile</h3><button class="close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="grid2">
+      <button class="modal-action" onclick="showToast('Profile editing demo active ✨')"><b>✏️ Edit Profile</b><small>Name & photo</small></button>
+      <button class="modal-action" onclick="showToast('Premium feature preview 💎')"><b>💎 Upgrade</b><small>More AI power</small></button>
+      <button class="modal-action" onclick="showToast('History demo opened 📜')"><b>📜 History</b><small>Your recent work</small></button>
+      <button class="modal-action" onclick="showToast('Dark mode is already active 🌙')"><b>🌙 Appearance</b><small>Night friendly UI</small></button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const messages = document.getElementById('messages');
+  const input = document.getElementById('input');
+  const toast = document.getElementById('toast');
+  const attachMenu = document.getElementById('attachMenu');
+  const chatHistory = [];
+  const MAX_HISTORY = 12;
+
+  const demoAnswers = [
+    "Bilkul! 😎 Main tumhe step-by-step simple Hindi me samjha sakta hoon. Jo banana hai, uska naam ya idea bhejo.",
+    "Ye ek achha idea hai 🔥. Pehle basic version banao, phir AI API connect karke ise real AI assistant bana sakte ho.",
+    "Mobile se bhi possible hai 📱. Acode me HTML/CSS/JS se prototype banao aur baad me hosting + API add karo.",
+    "Main tumhare liye code structure, UI ideas aur feature prompts bana sakta hoon. Bas batao kis feature se start karna hai."
+  ];
+
+  function timeNow(){
+    return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  }
+
+  function addMessage(text, who='ai'){
+    const row = document.createElement('div');
+    row.className = 'msg ' + (who === 'user' ? 'user' : '');
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.textContent = text;
+    const time = document.createElement('div');
+    time.className = 'time';
+    time.textContent = timeNow();
+    if(who === 'user'){
+      row.append(time,bubble);
+    } else {
+      row.append(bubble,time);
+    }
+    messages.appendChild(row);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function showTyping(){
+    const row = document.createElement('div');
+    row.className = 'msg';
+    row.id = 'typingRow';
+    row.innerHTML = '<div class="bubble typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>';
+    messages.appendChild(row);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function hideTyping(){
+    document.getElementById('typingRow')?.remove();
+  }
+
+  async function getReply(text){
+    const response = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({
+        message: text,
+        history: chatHistory.slice(-MAX_HISTORY)
+      })
+    });
+
+    let data = {};
+    try { data = await response.json(); } catch (_) {}
+
+    if(!response.ok) throw new Error(data.error || 'AI service unavailable');
+
+    const answer = (data.reply || '').trim();
+    if(!answer) throw new Error('AI ने कोई जवाब नहीं दिया।');
+    return answer;
+  }
+
+  async function sendMessage(){
+    const text = input.value.trim();
+    if(!text) return;
+
+    addMessage(text,'user');
+    chatHistory.push({role:'user', text});
+    input.value = '';
+    input.style.height = 'auto';
+    attachMenu.classList.remove('show');
+    showTyping();
+
+    try{
+      const reply = await getReply(text);
+      hideTyping();
+      addMessage(reply,'ai');
+      chatHistory.push({role:'model', text:reply});
+    }catch(error){
+      hideTyping();
+      addMessage("⚠️ Gemini AI connect नहीं हो पाया।\n\n" + (error.message || "थोड़ी देर बाद फिर कोशिश करें।"),'ai');
+    }
+  }
+
+  function quickPrompt(text){
+    input.value = text;
+    sendMessage();
+    setTimeout(()=>input.focus(),50);
+  }
+
+  function focusChat(){
+    document.getElementById('chatBox').scrollIntoView({behavior:'smooth', block:'center'});
+    setTimeout(()=>input.focus(),450);
+  }
+
+  function scrollToTools(){
+    document.querySelector('.section').scrollIntoView({behavior:'smooth', block:'center'});
+  }
+
+  function toggleAttach(){
+    attachMenu.classList.toggle('show');
+  }
+
+  function fakeAttach(name){
+    attachMenu.classList.remove('show');
+    showToast(name + ' option selected 📎');
+  }
+
+  function clearChat(){
+    messages.innerHTML = '';
+    chatHistory.length = 0;
+    addMessage("Chat clear ho gaya. 👋\nAb batao, kya banana hai?",'ai');
+  }
+
+  function openProfile(){
+    document.getElementById('modalBg').classList.add('show');
+  }
+
+  function closeModal(e){
+    if(!e || e.target.id === 'modalBg') document.getElementById('modalBg').classList.remove('show');
+  }
+
+  let toastTimer;
+  function showToast(text){
+    toast.textContent = text;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=>toast.classList.remove('show'),1800);
+  }
+
+  input.addEventListener('input',()=>{
+    input.style.height='auto';
+    input.style.height=Math.min(input.scrollHeight,120)+'px';
+  });
+  input.addEventListener('keydown',(e)=>{
+    if(e.key==='Enter' && !e.shiftKey){
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  document.getElementById('themeBtn').addEventListener('click',()=>{
+    document.body.style.filter = document.body.style.filter ? '' : 'saturate(1.16) brightness(1.05)';
+    showToast('Glow mode toggled ✨');
+  });
+
+  addMessage("Namaste Smart Abhishek! 👋🤖\nMain AI Master ka real Gemini assistant hoon. 🤖\nApp, coding, study, captions, ideas aur general questions pucho.");
+</script>
+</body>
+</html>
